@@ -1,0 +1,3 @@
+sys-kernel/chromeos-kernel-5_4 clang lld arm boot_dts_device_tree llvm_ias
+sys-kernel/chromeos-kernel-4_4 clang lld arm boot_dts_device_tree llvm_ias
+sys-kernel/rockchip-kernel -clang -lld -arm boot_dts_device_tree -llvm_ias

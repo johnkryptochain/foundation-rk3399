@@ -1,0 +1,5 @@
+sys-kernel/chromeos-kernel-5_4::chromiumos
+sys-kernel/chromeos-kernel-5_4::openjema-patches
+sys-kernel/chromeos-kernel-4_4::chromiumos
+sys-kernel/chromeos-kernel-4_4::openjema-patches
+sys-kernel/linux-firmware::openjema-patches

@@ -1,0 +1,73 @@
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b.dts
+index 3db06a26024a..6f253b93ee58 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b.dts
+@@ -156,6 +156,7 @@
+ 	};
+ 
+ 	es8316-sound {
++        status = "disabled";
+ 		compatible = "simple-audio-card";
+ 		simple-audio-card,format = "i2s";
+ 		simple-audio-card,name = "rockchip,es8316-codec";
+@@ -198,6 +199,7 @@
+ 	};
+ 
+ 	hdmi_codec: hdmi-codec {
++        status = "disabled";
+ 		compatible = "simple-audio-card";
+ 		simple-audio-card,format = "i2s";
+ 		simple-audio-card,mclk-fs = <256>;
+@@ -212,8 +214,15 @@
+ 		};
+ 	};
+ 
+-	spdif-sound {
++    hdmi-sound {
+ 		status = "okay";
++		compatible = "rockchip,rk3399-hdmi-dp";
++		rockchip,cpu = <&i2s2>;
++		rockchip,codec = <&hdmi>, <&cdn_dp>;
++	};
++
++	spdif-sound {
++		status = "disabled";
+ 		compatible = "simple-audio-card";
+ 		simple-audio-card,name = "ROCKCHIP,SPDIF";
+ 		simple-audio-card,cpu {
+@@ -225,7 +234,7 @@
+ 	};
+ 
+ 	spdif_out: spdif-out {
+-		status = "okay";
++		status = "disabled";
+ 		compatible = "linux,spdif-dit";
+ 		#sound-dai-cells = <0>;
+ 	};
+diff --git a/sound/soc/rockchip/rockchip_hdmi_dp.c b/sound/soc/rockchip/rockchip_hdmi_dp.c
+index 465a9c54c422..ae7dc446f6f0 100644
+--- a/sound/soc/rockchip/rockchip_hdmi_dp.c
++++ b/sound/soc/rockchip/rockchip_hdmi_dp.c
+@@ -97,11 +97,8 @@ static int rockchip_sound_register_jack(struct snd_soc_card *card, struct snd_so
+ 		dev_name = of_node_full_name(codec->dev->parent->of_node);
+ 	}
+ 
+-	if (dev_name) {
+-		snprintf(jack_name, sizeof(jack_name), "%s Jack", dev_name);
+-	} else {
+-		snprintf(jack_name, sizeof(jack_name), "Codec %d Jack", index);
+-	}
++	snprintf(jack_name, sizeof(jack_name), "%s Jack", card->name);
++
+ 
+ 	ret = snd_soc_card_jack_new(card, jack_name, SND_JACK_LINEOUT,
+ 						jack, NULL, 0);
+@@ -152,7 +149,7 @@ static struct snd_soc_dai_link rk_dailink = {
+ };
+ 
+ static struct snd_soc_card snd_soc_card_rk = {
+-	.name = "rk-hdmi-dp-sound",
++	.name = "rockchip-1",
+ 	.dai_link = &rk_dailink,
+ 	.num_links = 1,
+ 	.num_aux_devs = 0,

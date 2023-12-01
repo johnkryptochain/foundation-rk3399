@@ -1,0 +1,4 @@
+net-wireless/bluez bt_deprecated_tools
+sys-apps/gptfdisk -ncurses
+chromeos-base/chromeos-chrome chrome_media
+chromeos-base/cryptohome -direncription_allow_v2 lvm_stateful_partition

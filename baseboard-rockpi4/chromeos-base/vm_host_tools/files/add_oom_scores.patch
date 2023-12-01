@@ -1,0 +1,52 @@
+diff --git a/vm_tools/init/seneschal.conf b/vm_tools/init/seneschal.conf
+index 998eeca5d612..25b63be2097b 100644
+--- a/vm_tools/init/seneschal.conf
++++ b/vm_tools/init/seneschal.conf
+@@ -15,6 +15,8 @@ stop on stopped vm_concierge
+ respawn
+ expect daemon
+ 
++oom score 100
++
+ pre-start script
+   # If the pre-start script fails, by default nothing gets written to
+   # the logs. Make sure we can find out what went wrong by
+diff --git a/vm_tools/init/vm_cicerone.conf b/vm_tools/init/vm_cicerone.conf
+index 067aa2754e9b..7808a6f12601 100644
+--- a/vm_tools/init/vm_cicerone.conf
++++ b/vm_tools/init/vm_cicerone.conf
+@@ -12,6 +12,8 @@ stop on stopped vm_concierge
+ respawn
+ expect fork
+ 
++oom score 100
++
+ # Force gRPC to use poll instead of epoll.
+ # TODO(crbug.com/987390): Remove once epoll1 poller is removed or fixed.
+ env GRPC_POLL_STRATEGY=poll
+diff --git a/vm_tools/init/vm_concierge.conf b/vm_tools/init/vm_concierge.conf
+index 34a4b93a0ec2..791f02682252 100644
+--- a/vm_tools/init/vm_concierge.conf
++++ b/vm_tools/init/vm_concierge.conf
+@@ -13,6 +13,8 @@ stop on stopping ui
+ respawn
+ expect daemon
+ 
++oom score 0
++
+ tmpfiles /usr/lib/tmpfiles.d/arcvm.conf /usr/lib/tmpfiles.d/vm_tools.conf
+ 
+ # Camera libraries are mounted here at runtime.
+diff --git a/vm_tools/init/vmlog_forwarder.conf.in b/vm_tools/init/vmlog_forwarder.conf.in
+index 748e0f62b7a9..883ddf16f6a9 100644
+--- a/vm_tools/init/vmlog_forwarder.conf.in
++++ b/vm_tools/init/vmlog_forwarder.conf.in
+@@ -13,6 +13,8 @@ start on @dependent_start_services@
+ stop on @dependent_stop_services@
+ respawn
+ 
++oom score 100
++
+ pre-start script
+   # Ensure the kernel module is loaded.
+   modprobe -q vhost-vsock
